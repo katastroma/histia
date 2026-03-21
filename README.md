@@ -1,25 +1,17 @@
 # Histia
 
-Katastroma's reference provisioner. Implements the
-[katartismos](https://github.com/katastroma/katartismos) interface.
+Katastroma's provisioner. Implements the
+[katartismos](https://github.com/katastroma/katartismos) gRPC service.
 
-Given a resource inventory, histia applies, deletes, or diffs resources directly
-against the Kubernetes API using server-side apply. No external dependencies, no
-running services — just the cluster.
-
-## What This Is
-
-A Go module that implements the katartismos provisioner interface. Consumed as a
-dependency by orchestrators like
-[pedalion](https://github.com/katastroma/pedalion) that need to provision
-resources against a cluster.
+Given manifests, histia applies them to the cluster using server-side apply
+with Kubernetes impersonation. Prunes resources labeled with the tenant's
+identity that are no longer present in the current render.
 
 ## Ecosystem
 
-Histia is one of two reference implementations provided by
-[katastroma](https://github.com/katastroma):
-
-- **[Orpheus](https://github.com/katastroma/orpheus)** — reference resolver,
-  implements [keleustēs](https://github.com/katastroma/keleustes)
-- **Histia** (this) — reference provisioner, implements
+- **[Phortizo](https://github.com/katastroma/phortizo)** — retriever,
+  implements [naukleros](https://github.com/katastroma/naukleros)
+- **[Orpheus](https://github.com/katastroma/orpheus)** — renderer, implements
+  [keleustēs](https://github.com/katastroma/keleustes)
+- **Histia** (this) — provisioner, implements
   [katartismos](https://github.com/katastroma/katartismos)
