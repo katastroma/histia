@@ -3,9 +3,19 @@
 Katastroma's provisioner. Implements the
 [katartismos](https://github.com/katastroma/katartismos) gRPC service.
 
-Given manifests, histia applies them to the cluster using server-side apply with
-Kubernetes impersonation. Prunes resources labeled with the tenant's identity
-that are no longer present in the current render.
+Given manifests, labels, and a service account identity, histia applies the
+manifests to the cluster using server-side apply, stamps all applied resources
+with the given labels, and prunes any labeled resources no longer in the
+manifest set. Zero manifests means prune everything matching the labels.
+
+## RBAC
+
+Histia's own SA requires:
+
+- `impersonate` on service accounts — to impersonate tenant deployer SAs for all
+  mutations (create, patch, delete via SSA)
+- `list` on all resources — to query the cluster by label for pruning diffs.
+  Histia uses its own SA for reads and impersonates the tenant SA for mutations.
 
 ## Ecosystem
 
