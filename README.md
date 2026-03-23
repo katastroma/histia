@@ -1,7 +1,7 @@
 # Histia
 
 Katastroma's provisioner. Implements the
-[katartismos](https://github.com/katastroma/katartismos) interface.
+[katartismos](https://github.com/katastroma/katartismos) client API.
 
 Given manifests, labels, and a service account identity, histia applies the
 manifests to the cluster using server-side apply, stamps all applied resources
