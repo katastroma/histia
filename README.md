@@ -1,21 +1,20 @@
 # Histia
 
-Katastroma's provisioner. Implements the
-[katartismos](https://github.com/katastroma/katartismos) client API.
+Provisioner implementation. Implements the
+[katartismos](https://github.com/katastroma/katartismos) interface.
 
-Given manifests, labels, and a service account identity, histia applies the
-manifests to the cluster using server-side apply, stamps all applied resources
-with the given labels, and prunes any labeled resources no longer in the
-manifest set.
+Receives manifests via gRPC streaming and applies them to the cluster using
+server-side apply. Impersonates the tenant's provisioner ServiceAccount
+(`system:serviceaccount:<tenant-namespace>:provisioner`).
 
-Histia applies manifests in the order it receives them. It does not reorder —
-callers are responsible for providing manifests in a safe apply order.
+Before applying each manifest, verifies the resource type supports the `list`
+verb via the Kubernetes discovery API. Types that cannot be listed are rejected
+— they cannot be pruned and would be orphaned.
+
+Verifies the source target lease before applying.
+
+Streams applied manifests to the next pipeline stage.
 
 ## RBAC
 
-Histia's own SA requires:
-
-- `impersonate` on service accounts — to impersonate tenant deployer SAs for all
-  mutations (create, patch, delete via SSA)
-- `list` on all resources — to query the cluster by label for pruning diffs.
-  Histia uses its own SA for reads and impersonates the tenant SA for mutations.
+Histia's platform SA requires `impersonate` on ServiceAccounts.
